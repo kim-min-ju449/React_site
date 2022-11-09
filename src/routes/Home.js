@@ -1,13 +1,16 @@
 import React from "react";
 import {useEffect, useState} from "react";
-import {dbService} from "../firebase";
+import {dbService, storageService} from "../firebase";
 import Nweet from "../components/Nweet";
+import { v4 as uuidv4 } from "uuid";
+import NweetFactory from "../components/NweetFactory";
+//import uuid from 'react-uuid';
 
 const Home = ({userObj}) => {
     
-    const [nweet, setNweet] = useState("");
+    //const [nweet, setNweet] = useState("");
     const [nweets, setNweets] = useState([]);
-    const [attachment, setAttachment] = useState("");
+    //const [attachment, setAttachment] = useState("");
 
     useEffect(() => {
         dbService.collection("nweets").onSnapshot((snapshot) => {
@@ -21,50 +24,86 @@ const Home = ({userObj}) => {
       }, []);
     //console.log(nweets);
 
-    const onSubmit = async (event) =>{
-        //console.log(userObj.uid)
-        event.preventDefault();
-        await dbService.collection("nweets").add({
-            text: nweet,
-            createdAt: Date.now(),
-            //creatorId: userObj.uid,
-            createdAt: Date.now(),
-        });
-        setNweet("");
+    // const onSubmit = async (event) =>{
+    //     //console.log(userObj.uid)
+    //     event.preventDefault();
+       
+    //     // await dbService.collection("nweets").add({
+    //     //     text: nweet,
+    //     //     createdAt: Date.now(),
+    //     //     //creatorId: userObj.uid,
+    //     //     createdAt: Date.now(),
+    //     // });
+    //     // setNweet("");
+    //     let attachmentUrl ="";
+    //     if(attachment !== ""){
+
+    //         const attachmentRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
+    //         const response = await attachmentRef.putString(attachment, "data_url");
+    //         console.log(await response.ref.getDownloadURL());
+    //         attachmentUrl = await response.ref.getDownloadURL();
+    //     }
+    //     await dbService.collection("nweets").add({
+    //         text:nweet,
+    //         CreatedAt:Date.now(),
+    //         attachmentUrl,
+    //     });
+    //     setNweet("");
+    //     setAttachment("");
         
-    }
+    // }
+    // const onSubmit = async (event) => {
+    //     event.preventDefault();
+    //     let attachmentUrl = "";
+    //     if (attachment !== "") {
+    //     //   const attachmentRef = storageService
+    //     //     .ref()
+    //     //     .child(`${userObj.uid}/${uuidv4()}`);
+    //     const attachmentRef = storageService.ref().child(`$gs://nwitter-68dad.appspot.com//${uuidv4()}`);
+    //       const response = await attachmentRef.putString(attachment, "data_url");
+    //       attachmentUrl = await response.ref.getDownloadURL();
+    //     }
+    //     await dbService.collection("nweets").add({
+    //       text: nweet,
+    //       createdAt: Date.now(),
+    //       creatorId: Date.now(),
+    //       attachmentUrl,
+    //     });
+    //     setNweet("");
+    //     setAttachment("");
+    //   };
 
-    const onChange = (event) =>{
-        console.log("onChange() 호출");
-        event.preventDefault();
-        const{
-            target:{value},
-        } = event;
-        setNweet(value);
-    };
+    // const onChange = (event) =>{
+    //     console.log("onChange() 호출");
+    //     event.preventDefault();
+    //     const{
+    //         target:{value},
+    //     } = event;
+    //     setNweet(value);
+    // };
 
-    const onFileChange = (event) =>{
-       const{
-        target:{files},
+    // const onFileChange = (event) =>{
+    //    const{
+    //     target:{files},
 
-       } = event;
-       const theFile = files[0];
-       const reader = new FileReader();
-       reader.onloadend = (finishedEvent) =>{
-        //console.log(finishedEvent);
-            const{
-                currentTarget: {result},
-            } = finishedEvent;
-            setAttachment(result);
-       };
-       reader.readAsDataURL(theFile);
-    }
+    //    } = event;
+    //    const theFile = files[0];
+    //    const reader = new FileReader();
+    //    reader.onloadend = (finishedEvent) =>{
+    //     //console.log(finishedEvent);
+    //         const{
+    //             currentTarget: {result},
+    //         } = finishedEvent;
+    //         setAttachment(result);
+    //    };
+    //    reader.readAsDataURL(theFile);
+    // }
 
-    const onClearAttachment = () => setAttachment("");
+    // const onClearAttachment = () => setAttachment("");
 
     return(
-        <>
-        <form onSubmit={onSubmit}>
+        <div className="container">
+        {/* <form onSubmit={onSubmit}>
             <input
             value={nweet}
             onChange={onChange}
@@ -80,7 +119,8 @@ const Home = ({userObj}) => {
                 <button onClick={onClearAttachment}>Clear</button>
             </div>
             )}
-        </form>
+        </form> */}
+        <NweetFactory userObj={userObj}/>
         <div>
             {nweets.map((nweet) => (
                 // <div key={nweet.id}>
@@ -96,7 +136,7 @@ const Home = ({userObj}) => {
             
             
         </div>
-    </>
+    </div>
     
     );
     }
