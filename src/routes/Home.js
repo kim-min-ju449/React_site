@@ -121,7 +121,7 @@ const Home = ({userObj}) => {
             )}
         </form> */}
         <NweetFactory userObj={userObj}/>
-        <div>
+        <div style={{marginTop: 30}}>
             {nweets.map((nweet) => (
                 // <div key={nweet.id}>
                 //    <h4>{nweet.text}</h4> 
